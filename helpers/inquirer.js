@@ -2,6 +2,7 @@ const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const table = require("console.table");
 const addRole = require("./add-role.js");
+const addDep = require("./add-departments.js");
 
 const db = mysql.createConnection(
   {
@@ -57,6 +58,9 @@ const initial = () => {
               initial();
             }
           );
+          break;
+        case "Add a Department":
+          return addDep();
           break;
         case "Add a Role":
           return addRole();

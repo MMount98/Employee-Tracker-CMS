@@ -9,7 +9,6 @@ const db = mysql.createConnection(
     password: "",
     database: "employee_db",
   },
-  console.log(`Connected to Employee Database!`)
 );
 
 const addRole = () => {
@@ -37,6 +36,45 @@ const addRole = () => {
         case "Billing":
           db.query(
             "INSERT INTO role (title, salary, department_id) VALUES (?,?,1)",
+            [data.title, data.salary],
+            function (err, results) {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(`Added ${data.title} to database`);
+              }
+            }
+          );
+          break;
+        case "Human Resources":
+          db.query(
+            "INSERT INTO role (title, salary, department_id) VALUES (?,?,2)",
+            [data.title, data.salary],
+            function (err, results) {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(`Added ${data.title} to database`);
+              }
+            }
+          );
+          break;
+        case "Engineering":
+          db.query(
+            "INSERT INTO role (title, salary, department_id) VALUES (?,?,3)",
+            [data.title, data.salary],
+            function (err, results) {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(`Added ${data.title} to database`);
+              }
+            }
+          );
+          break;
+        case "Sales":
+          db.query(
+            "INSERT INTO role (title, salary, department_id) VALUES (?,?,4)",
             [data.title, data.salary],
             function (err, results) {
               if (err) {
