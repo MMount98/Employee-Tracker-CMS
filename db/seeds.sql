@@ -15,7 +15,7 @@ VALUES ('Front End Developer', 90000.00, 3),
        
 INSERT INTO employee(first_name,last_name,role_id,manger_id)
 VALUES ('Michael', 'Mount', 2, 2),
-	   ('Jo', 'Watts', 3, null),
+	('Jo', 'Watts', 3, null),
        ('Jacob', 'Paulson', 1, 2),
        ('Sage', 'Garrett',4, null),
        ('Maddie', 'McClure', 5, 2),

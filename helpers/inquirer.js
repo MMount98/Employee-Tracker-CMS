@@ -1,18 +1,14 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const table = require("console.table");
-const addRole = require("./add-role.js");
-const addDep = require("./add-departments.js");
+const { addDep, addRole } = require("./addFunctions.js");
 
-const db = mysql.createConnection(
-  {
-    host: "127.0.0.1",
-    user: "root",
-    password: "",
-    database: "employee_db",
-  },
-  console.log(`Connected to Employee Database!`)
-);
+const db = mysql.createConnection({
+  host: "127.0.0.1",
+  user: "root",
+  password: "",
+  database: "employee_db",
+});
 
 const initial = () => {
   inquirer
@@ -60,10 +56,20 @@ const initial = () => {
           );
           break;
         case "Add a Department":
-          return addDep();
+          addDep(initial);
           break;
+
         case "Add a Role":
-          return addRole();
+          return addRole(initial);
+          break;
+
+        case "Quit":
+          db.end(function (err) {
+            if (err) {
+              return console.log("error:" + err.message);
+            }
+            console.log("Close the database connection.");
+          });
           break;
         default:
           throw Error("Failed to pass shape value to Constructor");
