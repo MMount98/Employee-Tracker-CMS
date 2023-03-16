@@ -2,40 +2,42 @@ const inquirer = require("inquirer");
 const mysql = require("mysql2");
 
 //CONNECTION
-const db = mysql
-  .createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "",
-    database: "employee_db",
-  })
-  .promise();
+// const db = mysql
+//   .createConnection({
+//     host: "127.0.0.1",
+//     user: "root",
+//     password: "",
+//     database: "employee_db",
+//   })
+//   .promise();
 
 //Queary Functions
 
-const depChoices = async () => {
+const depChoices = async (db) => {
   const departments = await db.query(
     `SELECT id AS value, name FROM departments;`
   );
   return departments[0];
 };
 
-const roleChoices = async () => {
-  const employees = await db.query(`SELECT id AS value, title FROM roles;`);
+const roleChoices = async (db) => {
+  const employees = await db.query(
+    `SELECT id AS value, title AS name FROM roles;`
+  );
   return employees[0];
 };
 
-const empChoices = async () => {
+const empChoices = async (db) => {
   const mangers = await db.query(
-    `SELECT id AS value, first_name, last_name  FROM employees;`
+    `SELECT id AS value, CONCAT(first_name, " ", last_name) AS name FROM employees;`
   );
   return mangers[0];
 };
 
 //Adding Functions
 
-const addRole = async (cb) => {
-  const departments = await depChoices();
+const addRole = async (db, cb) => {
+  const departments = await depChoices(db);
   inquirer
     .prompt([
       {
@@ -61,7 +63,7 @@ const addRole = async (cb) => {
         [data.title, data.salary, data.department]
       ).then(function (results) {
         console.log(`Added ${data.title} to roles database`);
-        cb();
+        cb(db);
       });
     })
     .catch((error) => {
@@ -73,7 +75,7 @@ const addRole = async (cb) => {
     });
 };
 
-const addDep = (cb) => {
+const addDep = (db, cb) => {
   inquirer
     .prompt([
       {
@@ -83,11 +85,10 @@ const addDep = (cb) => {
       },
     ])
     .then((data) => {
-      console.log(data);
       db.query("INSERT INTO departments (name) VALUES (?)", [data.title]).then(
         function (results) {
           console.log(`Added ${data.title} to department database`);
-          cb();
+          cb(db);
         }
       );
     })
@@ -100,9 +101,9 @@ const addDep = (cb) => {
     });
 };
 
-const addEmpl = async (cb) => {
-  const employees = await roleChoices();
-  const mangers = await empChoices();
+const addEmpl = async (db, cb) => {
+  const employees = await roleChoices(db);
+  const mangers = await empChoices(db);
   inquirer
     .prompt([
       {
@@ -136,7 +137,7 @@ const addEmpl = async (cb) => {
         console.log(
           `Added ${data.first_name} ${data.last_name} to roles database`
         );
-        cb();
+        cb(db);
       });
     })
     .catch((error) => {

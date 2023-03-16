@@ -4,14 +4,8 @@ const table = require("console.table");
 const { addDep, addRole, addEmpl } = require("./addFunctions.js");
 const { updateRole } = require("./updateFunction.js");
 
-const db = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "",
-  database: "employee_db",
-});
 
-const initial = () => {
+const initial = (db) => {
   inquirer
     .prompt([
       {
@@ -35,15 +29,15 @@ const initial = () => {
         case "View All Departments":
           db.query("SELECT * FROM departments", function (err, results) {
             console.table(results);
-            initial();
+            initial(db);
           });
           break;
         case "View All Employees":
           db.query(
-            "SELECT first_name, last_name, title, salary FROM employee JOIN role ON employee.role_id = role.id ",
+            "SELECT first_name, last_name, title, salary FROM employees JOIN roles ON employees.roles_id = roles.id",
             function (err, results) {
               console.table(results);
-              initial();
+              initial(db);
             }
           );
           break;
@@ -51,25 +45,29 @@ const initial = () => {
           db.query(
             "SELECT * FROM roles JOIN departments ON roles.departments_id  = departments.id ORDER BY roles.id;",
             function (err, results) {
-              console.table(results);
-              initial();
+              if (err) {
+                console.log(err);
+              } else {
+                console.table(results);
+                initial(db);
+              }
             }
           );
           break;
         case "Add a Department":
-          addDep(initial);
+          addDep(db.promise(), initial);
           break;
 
         case "Add a Role":
-          return addRole(initial);
+          return addRole(db.promise(), initial);
           break;
 
         case "Add an Employee":
-          return addEmpl(initial);
+          return addEmpl(db.promise(), initial);
           break;
 
         case "Update an Employee role":
-          return updateRole(initial);
+          return updateRole(db.promise(), initial);
           break;
 
         case "Quit":
