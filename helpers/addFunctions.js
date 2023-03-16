@@ -1,15 +1,7 @@
+//Required Modules
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 
-//CONNECTION
-// const db = mysql
-//   .createConnection({
-//     host: "127.0.0.1",
-//     user: "root",
-//     password: "",
-//     database: "employee_db",
-//   })
-//   .promise();
 
 //Queary Functions
 

@@ -12,8 +12,4 @@ const db = mysql.createConnection({
   database: "employee_db",
 });
 
-// db.query("SELECT * FROM departments", function (err, results) {
-//   console.table(results);
-// })
-
 initial(db);
