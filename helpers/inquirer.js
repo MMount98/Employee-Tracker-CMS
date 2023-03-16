@@ -2,8 +2,7 @@ const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const table = require("console.table");
 const { addDep, addRole, addEmpl } = require("./addFunctions.js");
-const { updateRole } = require("./updateFunction.js");
-
+const { updateRole, updateManager } = require("./updateFunction.js");
 
 const initial = (db) => {
   inquirer
@@ -20,6 +19,7 @@ const initial = (db) => {
           "Add a Role",
           "Add an Employee",
           "Update an Employee role",
+          "Update an Employee Manager",
           "Quit",
         ],
       },
@@ -34,7 +34,7 @@ const initial = (db) => {
           break;
         case "View All Employees":
           db.query(
-            "SELECT first_name, last_name, title, salary FROM employees JOIN roles ON employees.roles_id = roles.id",
+            "SELECT employees.id, employees.first_name, employees.last_name, manager_id AS manager, roles.title, departments.name AS department, roles.salary FROM employees  JOIN roles ON employees.roles_id = roles.id JOIN departments ON departments.id = roles.id ORDER BY employees.id;",
             function (err, results) {
               console.table(results);
               initial(db);
@@ -55,19 +55,23 @@ const initial = (db) => {
           );
           break;
         case "Add a Department":
-          addDep(db.promise(), initial);
+          addDep(db, initial);
           break;
 
         case "Add a Role":
-          return addRole(db.promise(), initial);
+          return addRole(db, initial);
           break;
 
         case "Add an Employee":
-          return addEmpl(db.promise(), initial);
+          return addEmpl(db, initial);
           break;
 
         case "Update an Employee role":
-          return updateRole(db.promise(), initial);
+          return updateRole(db, initial);
+          break;
+
+        case "Update an Employee Manager":
+          return updateManager(db, initial);
           break;
 
         case "Quit":
@@ -75,7 +79,7 @@ const initial = (db) => {
             if (err) {
               return console.log("error:" + err.message);
             }
-            console.log("Close the database connection.");
+            console.log("Thank you! Have a Great Day!");
           });
           break;
         default:

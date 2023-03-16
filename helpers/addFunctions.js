@@ -37,7 +37,7 @@ const empChoices = async (db) => {
 //Adding Functions
 
 const addRole = async (db, cb) => {
-  const departments = await depChoices(db);
+  const departments = await depChoices(db.promise());
   inquirer
     .prompt([
       {
@@ -58,13 +58,15 @@ const addRole = async (db, cb) => {
       },
     ])
     .then((data) => {
-      db.query(
-        "INSERT INTO roles(title,salary,departments_id) VALUES (?,?,?)",
-        [data.title, data.salary, data.department]
-      ).then(function (results) {
-        console.log(`Added ${data.title} to roles database`);
-        cb(db);
-      });
+      db.promise()
+        .query(
+          "INSERT INTO roles(title,salary,departments_id) VALUES (?,?,?)",
+          [data.title, data.salary, data.department]
+        )
+        .then(function (results) {
+          console.log(`Added ${data.title} to roles database`);
+          cb(db);
+        });
     })
     .catch((error) => {
       if (error.isTtyError) {
@@ -85,12 +87,12 @@ const addDep = (db, cb) => {
       },
     ])
     .then((data) => {
-      db.query("INSERT INTO departments (name) VALUES (?)", [data.title]).then(
-        function (results) {
+      db.promise()
+        .query("INSERT INTO departments (name) VALUES (?)", [data.title])
+        .then(function (results) {
           console.log(`Added ${data.title} to department database`);
           cb(db);
-        }
-      );
+        });
     })
     .catch((error) => {
       if (error.isTtyError) {
@@ -102,8 +104,8 @@ const addDep = (db, cb) => {
 };
 
 const addEmpl = async (db, cb) => {
-  const employees = await roleChoices(db);
-  const mangers = await empChoices(db);
+  const employees = await roleChoices(db.promise());
+  const mangers = await empChoices(db.promise());
   inquirer
     .prompt([
       {
@@ -130,15 +132,17 @@ const addEmpl = async (db, cb) => {
       },
     ])
     .then((data) => {
-      db.query(
-        "INSERT INTO employees (first_name,last_name,roles_id,manger_id) VALUES (?,?,?,?)",
-        [data.first_name, data.last_name, data.role, data.manger]
-      ).then(function (results) {
-        console.log(
-          `Added ${data.first_name} ${data.last_name} to roles database`
-        );
-        cb(db);
-      });
+      db.promise()
+        .query(
+          "INSERT INTO employees (first_name,last_name,roles_id,manager_id) VALUES (?,?,?,?)",
+          [data.first_name, data.last_name, data.role, data.manger]
+        )
+        .then(function (results) {
+          console.log(
+            `Added ${data.first_name} ${data.last_name} to roles database`
+          );
+          cb(db);
+        });
     })
     .catch((error) => {
       if (error) {
