@@ -1,7 +1,8 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const table = require("console.table");
-const { addDep, addRole } = require("./addFunctions.js");
+const { addDep, addRole, addEmpl } = require("./addFunctions.js");
+const { updateRole } = require("./updateFunction.js");
 
 const db = mysql.createConnection({
   host: "127.0.0.1",
@@ -48,7 +49,7 @@ const initial = () => {
           break;
         case "Veiw All Roles":
           db.query(
-            "SELECT title, name AS department, salary FROM role JOIN departments ON role.department_id = departments.id;",
+            "SELECT * FROM roles JOIN departments ON roles.departments_id  = departments.id ORDER BY roles.id;",
             function (err, results) {
               console.table(results);
               initial();
@@ -61,6 +62,14 @@ const initial = () => {
 
         case "Add a Role":
           return addRole(initial);
+          break;
+
+        case "Add an Employee":
+          return addEmpl(initial);
+          break;
+
+        case "Update an Employee role":
+          return updateRole(initial);
           break;
 
         case "Quit":
