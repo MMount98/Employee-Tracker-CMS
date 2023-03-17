@@ -3,6 +3,7 @@ const mysql = require("mysql2");
 const table = require("console.table");
 const { addDep, addRole, addEmpl } = require("./addFunctions.js");
 const { updateRole, updateManager } = require("./updateFunction.js");
+var figlet = require("figlet");
 
 const initial = (db) => {
   inquirer
@@ -79,7 +80,12 @@ const initial = (db) => {
             if (err) {
               return console.log("error:" + err.message);
             }
-            console.log("Thank you! Have a Great Day!");
+            console.log(
+              figlet.textSync("GoodBye! Have a Great Day!", {
+                width: 120,
+                whitespaceBreak: true,
+              })
+            );
           });
           break;
         default:
