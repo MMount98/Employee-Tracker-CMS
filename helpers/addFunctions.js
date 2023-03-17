@@ -2,7 +2,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 
-
 //Queary Functions
 
 const depChoices = async (db) => {

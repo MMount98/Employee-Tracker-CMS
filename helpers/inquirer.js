@@ -41,6 +41,7 @@ const initial = (db) => {
             initial(db);
           });
           break;
+
         case "View All Employees":
           db.query(
             "SELECT employees.id, employees.first_name, employees.last_name, roles.title,  departments.name AS department, roles.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employees LEFT JOIN roles ON employees.roles_id = roles.id LEFT JOIN departments ON roles.departments_id = departments.id LEFT JOIN employees AS manager ON manager.id = employees.manager_id;",
@@ -50,6 +51,7 @@ const initial = (db) => {
             }
           );
           break;
+
         case "Veiw All Roles":
           db.query(
             "SELECT roles.id, roles.title, departments.name AS department, roles.salary FROM roles JOIN departments ON roles.departments_id  = departments.id ORDER BY roles.id;",
@@ -63,6 +65,7 @@ const initial = (db) => {
             }
           );
           break;
+
         case "Add a Department":
           addDep(db, initial);
           break;
