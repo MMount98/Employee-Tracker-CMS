@@ -3,7 +3,11 @@ const mysql = require("mysql2");
 const table = require("console.table");
 const { addDep, addRole, addEmpl } = require("./addFunctions.js");
 const { updateRole, updateManager } = require("./updateFunction.js");
-const { deleteRole, deleteDepartment } = require("./deleteFunctions.js");
+const {
+  deleteRole,
+  deleteDepartment,
+  deleteEmployee,
+} = require("./deleteFunctions.js");
 var figlet = require("figlet");
 
 const initial = (db) => {
@@ -24,6 +28,7 @@ const initial = (db) => {
           "Update an Employee Manager",
           "Delete a Role",
           "Delete a Department",
+          "Delete an Employee",
           "Quit",
         ],
       },
@@ -84,6 +89,10 @@ const initial = (db) => {
 
         case "Delete a Department":
           return deleteDepartment(db, initial);
+          break;
+
+        case "Delete an Employee":
+          return deleteEmployee(db, initial);
           break;
 
         case "Quit":

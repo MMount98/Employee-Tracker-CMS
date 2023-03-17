@@ -59,4 +59,32 @@ const deleteDepartment = async (db, cb) => {
     });
 };
 
-module.exports = { deleteRole, deleteDepartment };
+const deleteEmployee = async (db, cb) => {
+  const employees = await empChoices(db.promise());
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "deleteValue",
+        message: "Which Employee?",
+        choices: employees,
+      },
+    ])
+    .then((data) => {
+      db.promise()
+        .query("DELETE FROM employees WHERE id = ?;", [data.deleteValue])
+        .then(function (results) {
+          console.log(`Removed Employee from Database`);
+          cb(db);
+        });
+    })
+    .catch((error) => {
+      if (error.isTtyError) {
+        console.log("Coudnlt Render Prompt");
+      } else {
+        console.log("Error with inquire, check if update is needed");
+      }
+    });
+};
+
+module.exports = { deleteRole, deleteDepartment, deleteEmployee };
