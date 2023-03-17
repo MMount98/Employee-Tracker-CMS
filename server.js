@@ -21,4 +21,5 @@ const db = mysql.createConnection(
   )
 );
 
+
 initial(db);
